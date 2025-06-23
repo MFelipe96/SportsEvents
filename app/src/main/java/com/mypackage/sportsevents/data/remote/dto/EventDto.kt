@@ -1,4 +1,4 @@
-package com.mypackage.sportsevents.data
+package com.mypackage.sportsevents.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 data class EventDto(
