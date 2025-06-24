@@ -8,6 +8,9 @@ class GetSportsUseCase @Inject constructor(
     private val repository: SportsRepository
 ) {
     suspend operator fun invoke(): List<Sport> {
-        return repository.getAllSports()
+        val sports = repository.getAllSports()
+        return sports.map { sport ->
+            sport.copy(events = sport.events.sortedBy { it.timestamp })
+        }
     }
 }
