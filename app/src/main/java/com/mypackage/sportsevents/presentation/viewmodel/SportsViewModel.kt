@@ -17,7 +17,11 @@ class SportsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<SportsUiState>(SportsUiState.Loading)
     val uiState: StateFlow<SportsUiState> = _uiState
 
-    fun loadSports() {
+    init {
+        loadSports()
+    }
+
+    private fun loadSports() {
         viewModelScope.launch {
             _uiState.value = SportsUiState.Loading
             try {
