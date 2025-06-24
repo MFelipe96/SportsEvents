@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mypackage.sportsevents.domain.model.Sport
+import com.mypackage.sportsevents.presentation.ui.components.SportSection
 import com.mypackage.sportsevents.presentation.viewmodel.SportsUiState
 import com.mypackage.sportsevents.presentation.viewmodel.SportsViewModel
 
@@ -44,32 +46,30 @@ fun SportsScreen(
                     Text("No sports events available")
                 }
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    items(sports.size) { index ->
-                        Text(
-                            text = sports[index].name,
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                        )
-                    }
-                }
+                SportsContent(sports = sports)
             }
         }
 
         is SportsUiState.Error -> {
             val message = (uiState as SportsUiState.Error).message
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text("Error: $message")
             }
+        }
+    }
+}
+
+@Composable
+fun SportsContent(sports: List<Sport>) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(sports) { sport ->
+            SportSection(
+                sport = sport,
+                events = sport.events
+            )
         }
     }
 }
