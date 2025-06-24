@@ -13,6 +13,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mypackage.sportsevents.domain.model.Event
 import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -20,17 +23,6 @@ fun EventItem(
     event: Event,
     onFavoriteClick: () -> Unit
 ) {
-    var remainingTime by remember { mutableLongStateOf(event.timestamp - (System.currentTimeMillis() / 1000)) }
-
-    LaunchedEffect(event.id) {
-        while (remainingTime > 0) {
-            delay(1000L)
-            remainingTime--
-        }
-    }
-
-    val formattedTime = formatTime(remainingTime)
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,14 +43,8 @@ fun EventItem(
                 } else {
                     Text(event.name, style = MaterialTheme.typography.bodyLarge)
                 }
-
                 Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = "Starts in: $formattedTime",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                EventCountdown(event.timestamp)
             }
 
             IconButton(onClick = onFavoriteClick) {
@@ -70,6 +56,40 @@ fun EventItem(
             }
         }
     }
+}
+
+@Composable
+fun EventCountdown(eventTimestamp: Long) {
+    var now by remember { mutableLongStateOf(System.currentTimeMillis() / 1000) }
+
+    LaunchedEffect(eventTimestamp) {
+        if (eventTimestamp > now) {
+            while (true) {
+                now = System.currentTimeMillis() / 1000
+                delay(1000L)
+            }
+        }
+    }
+
+    val diff = eventTimestamp - now
+
+    val displayText = if (diff > 0) {
+        "Starts in ${formatTime(diff)}"
+    } else {
+        "Started ${formatDateTime(eventTimestamp)}"
+    }
+
+    Text(
+        text = displayText,
+        style = MaterialTheme.typography.bodyMedium,
+        color = if (diff > 0) Color.Blue else Color.Red
+    )
+}
+
+private fun formatDateTime(timestamp: Long): String {
+    val sdf = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault())
+    val date = Date(timestamp * 1000)
+    return sdf.format(date)
 }
 
 private fun formatTime(seconds: Long): String {
@@ -85,7 +105,7 @@ fun EventItemPreview() {
     val mockEvent = Event(
         id = "123",
         name = "Brazil - Argentina",
-        timestamp = (System.currentTimeMillis() / 1000) + 3600, // +1 hora
+        timestamp = (System.currentTimeMillis() / 1000) + 3600,
         isFavorite = true
     )
 
