@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
     kotlin("kapt")
 }
 
@@ -57,6 +58,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.2"){
         exclude(group = "androidx.emoji2", module = "emoji2")
     }
+    //it´s better to use this version for don´t have to downgrade activity-compose version
+    implementation("androidx.emoji2:emoji2:1.3.0")
 
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
@@ -84,5 +87,5 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 }
