@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,7 +19,10 @@ import com.mypackage.sportsevents.domain.model.Event
 fun SportSection(
     sport: Sport,
     events: List<Event>,
-    initiallyExpanded: Boolean = false
+    initiallyExpanded: Boolean = false,
+    isFavoriteFilterEnabled: Boolean,
+    onFavoriteToggleChange: (Boolean) -> Unit,
+    onFavoriteClick: (eventId: String) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(initiallyExpanded) }
 
@@ -43,16 +47,36 @@ fun SportSection(
                 text = sport.name,
                 style = MaterialTheme.typography.titleMedium
             )
+            Spacer(modifier = Modifier.weight(1f))
+            ShowFavoritesButton(isFavoriteFilterEnabled, onFavoriteToggleChange)
         }
         Divider()
         AnimatedVisibility(visible = isExpanded) {
             Column {
                 events.forEach { event ->
                     EventItem(
-                        event = event
+                        event = event,
+                        onFavoriteClick = { onFavoriteClick(event.id) }
                     )
                 }
             }
         }
     }
+}
+
+@Composable
+fun ShowFavoritesButton(isFavoriteFilterEnabled: Boolean, onFavoriteToggleChange: (Boolean) -> Unit){
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Default.Star,
+            contentDescription = null,
+            tint = if (isFavoriteFilterEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(Modifier.width(4.dp))
+        Switch(
+            checked = isFavoriteFilterEnabled,
+            onCheckedChange = onFavoriteToggleChange
+        )
+    }
+
 }

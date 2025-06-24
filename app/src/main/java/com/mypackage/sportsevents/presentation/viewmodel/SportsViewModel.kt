@@ -32,5 +32,24 @@ class SportsViewModel @Inject constructor(
             }
         }
     }
+
+    fun toggleFavorite(eventId: String) {
+        viewModelScope.launch {
+            val currentState = _uiState.value
+            if (currentState is SportsUiState.Success) {
+                val updatedSports = currentState.sports.map { sport ->
+                    val updatedEvents = sport.events.map { event ->
+                        if (event.id == eventId) {
+                            event.copy(isFavorite = !event.isFavorite)
+                        } else {
+                            event
+                        }
+                    }
+                    sport.copy(events = updatedEvents)
+                }
+                _uiState.value = SportsUiState.Success(updatedSports)
+            }
+        }
+    }
 }
 

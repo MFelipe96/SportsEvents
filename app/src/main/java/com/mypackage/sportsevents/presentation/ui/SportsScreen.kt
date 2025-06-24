@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -46,7 +49,9 @@ fun SportsScreen(
                     Text("No sports events available")
                 }
             } else {
-                SportsContent(sports = sports)
+                SportsContent(sports = sports) { eventId ->
+                    viewModel.toggleFavorite(eventId)
+                }
             }
         }
 
@@ -63,12 +68,23 @@ fun SportsScreen(
 }
 
 @Composable
-fun SportsContent(sports: List<Sport>) {
+fun SportsContent(sports: List<Sport>, onFavoriteAction: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(sports) { sport ->
+            var showOnlyFavorites by remember { mutableStateOf(false) }
+
+            val filteredEvents = remember(showOnlyFavorites, sport.events) {
+                if (showOnlyFavorites) sport.events.filter { it.isFavorite }
+                else sport.events
+            }
+
             SportSection(
                 sport = sport,
-                events = sport.events
+                events = filteredEvents,
+                isFavoriteFilterEnabled = showOnlyFavorites,
+                onFavoriteToggleChange = { showOnlyFavorites = it },
+                onFavoriteClick = onFavoriteAction
+
             )
         }
     }

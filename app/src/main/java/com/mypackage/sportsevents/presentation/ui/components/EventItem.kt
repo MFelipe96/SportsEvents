@@ -1,10 +1,14 @@
 package com.mypackage.sportsevents.presentation.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mypackage.sportsevents.domain.model.Event
@@ -13,7 +17,8 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun EventItem(
-    event: Event
+    event: Event,
+    onFavoriteClick: () -> Unit
 ) {
     var remainingTime by remember { mutableLongStateOf(event.timestamp - (System.currentTimeMillis() / 1000)) }
 
@@ -55,6 +60,14 @@ fun EventItem(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
+
+            IconButton(onClick = onFavoriteClick) {
+                Icon(
+                    imageVector = if (event.isFavorite) Icons.Filled.Star else Icons.Outlined.StarRate,
+                    contentDescription = "Toggle favorite",
+                    tint = if (event.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
@@ -78,7 +91,8 @@ fun EventItemPreview() {
 
     MaterialTheme {
         EventItem(
-            event = mockEvent
+            event = mockEvent,
+            onFavoriteClick = {}
         )
     }
 }
