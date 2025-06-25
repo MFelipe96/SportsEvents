@@ -17,12 +17,14 @@ class GetSportsUseCase @Inject constructor(
 
         val sports = repository.getAllSports()
         val now = System.currentTimeMillis() / 1000
-        return sports.map { sport ->
-            val sortedEvents = sport.events.sortedWith(compareBy<Event> {
-                it.timestamp < now
-            }.thenBy {
-                it.timestamp
-            })
+        return sports
+            .sortedBy { it.name.lowercase() }
+            .map { sport ->
+                val sortedEvents = sport.events.sortedWith(compareBy<Event> {
+                    it.timestamp < now
+                }.thenBy {
+                    it.timestamp
+                })
             sport.copy(events = sortedEvents)
         }
     }
