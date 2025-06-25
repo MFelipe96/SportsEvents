@@ -53,23 +53,23 @@ fun SportSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = stringResource(R.string.expand_or_collapse_description)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = sport.name,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Icon(
                 imageVector = getSportIcon(sport.id),
                 contentDescription = null,
                 modifier = Modifier
                     .size(28.dp)
                     .padding(4.dp),
             )
+            Text(
+                text = sport.name,
+                style = MaterialTheme.typography.titleMedium
+            )
             Spacer(modifier = Modifier.weight(1f))
             ShowFavoritesButton(isFavoriteFilterEnabled, onFavoriteToggleChange)
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = stringResource(R.string.expand_or_collapse_description)
+            )
         }
         Divider()
         AnimatedVisibility(visible = isExpanded) {
