@@ -3,7 +3,7 @@ package com.mypackage.sportsevents.presentation.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.StarRate
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -49,7 +49,7 @@ fun EventItem(
 
             IconButton(onClick = onFavoriteClick) {
                 Icon(
-                    imageVector = if (event.isFavorite) Icons.Filled.Star else Icons.Outlined.StarRate,
+                    imageVector = if (event.isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                     contentDescription = "Toggle favorite",
                     tint = if (event.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
                 )
