@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mypackage.sportsevents.domain.model.Sport
 import com.mypackage.sportsevents.domain.model.Event
@@ -80,5 +81,29 @@ fun ShowFavoritesButton(isFavoriteFilterEnabled: Boolean, onFavoriteToggleChange
             }
         )
     }
+}
+@Preview(showBackground = true)
+@Composable
+fun SportSectionPreview() {
+    val mockEvents = listOf(
+        Event(id = "1", name = "Spain - Italy", timestamp = (System.currentTimeMillis() / 1000) + 7200, isFavorite = false),
+        Event(id = "2", name = "France - Germany", timestamp = (System.currentTimeMillis() / 1000) + 5400, isFavorite = true),
+    )
+    val mockSport = Sport(
+        id = "FOOT",
+        name = "SOCCER",
+        events = mockEvents.toMutableList()
+    )
 
+    var favFilter by remember { mutableStateOf(false) }
+
+    MaterialTheme {
+        SportSection(
+            sport = mockSport,
+            events = if (favFilter) mockEvents.filter { it.isFavorite } else mockEvents,
+            isFavoriteFilterEnabled = favFilter,
+            onFavoriteToggleChange = { favFilter = it },
+            onFavoriteClick = {}
+        )
+    }
 }
