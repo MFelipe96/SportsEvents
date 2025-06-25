@@ -17,8 +17,16 @@ class SportsRepositoryImpl @Inject constructor(
         return try {
             val apiResponse = api.getSports()
 
+            val favoritesFromDb = sportsDao.getFavoriteEventIds().toSet()
+
             val entities = apiResponse.flatMap { sportDto ->
-                sportDto.events.map { it.toEntity(sportDto.id, sportDto.name) }
+                sportDto.events.map { eventDto ->
+                    eventDto.toEntity(
+                        sportId = sportDto.id,
+                        sportName = sportDto.name,
+                        isFavorite = eventDto.id in favoritesFromDb
+                    )
+                }
             }
 
             //For now, we will save every time to keep the local storage up to date.
@@ -29,9 +37,14 @@ class SportsRepositoryImpl @Inject constructor(
                 Sport(
                     id = sportDto.id,
                     name = sportDto.name,
-                    events = sportDto.events.map { it.toDomain() }
+                    events = sportDto.events.map { eventDto ->
+                        eventDto.toDomain(
+                            isFavorite = eventDto.id in favoritesFromDb
+                        )
+                    }
                 )
             }
+
         } catch (e: Exception) {
             val cachedEvents = sportsDao.getAllEvents()
             if (cachedEvents.isNotEmpty()) {

@@ -17,4 +17,7 @@ interface SportsDao {
 
     @Query("UPDATE events SET isFavorite = :isFavorite WHERE id = :eventId")
     suspend fun updateFavorite(eventId: String, isFavorite: Boolean)
+
+    @Query("SELECT id FROM events WHERE isFavorite = 1")
+    suspend fun getFavoriteEventIds(): List<String>
 }
