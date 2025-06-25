@@ -51,9 +51,7 @@ fun SportsScreen(
                     Text(stringResource(R.string.no_events_available_error_msg))
                 }
             } else {
-                SportsContent(sports = sports) { eventId ->
-                    viewModel.toggleFavorite(eventId)
-                }
+                SportsContent(sports = sports, viewModel = viewModel)
             }
         }
 
@@ -72,13 +70,14 @@ fun SportsScreen(
 }
 
 @Composable
-fun SportsContent(sports: List<Sport>, onFavoriteAction: (String) -> Unit) {
+fun SportsContent(sports: List<Sport>, viewModel: SportsViewModel) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(sports) { sport ->
             var showOnlyFavorites by remember { mutableStateOf(false) }
 
             val filteredEvents = remember(showOnlyFavorites, sport.events) {
-                if (showOnlyFavorites) sport.events.filter { it.isFavorite }
+                if (showOnlyFavorites)
+                    viewModel.filterByFavorites(sport.events)
                 else sport.events
             }
 
@@ -87,8 +86,9 @@ fun SportsContent(sports: List<Sport>, onFavoriteAction: (String) -> Unit) {
                 events = filteredEvents,
                 isFavoriteFilterEnabled = showOnlyFavorites,
                 onFavoriteToggleChange = { showOnlyFavorites = it },
-                onFavoriteClick = onFavoriteAction
-
+                onFavoriteClick = { eventId ->
+                    viewModel.toggleFavorite(eventId)
+                }
             )
         }
     }

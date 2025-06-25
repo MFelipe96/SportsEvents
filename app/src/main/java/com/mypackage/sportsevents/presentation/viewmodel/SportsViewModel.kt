@@ -2,6 +2,8 @@ package com.mypackage.sportsevents.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mypackage.sportsevents.domain.model.Event
+import com.mypackage.sportsevents.domain.usecase.FilterFavoriteEventsUseCase
 import com.mypackage.sportsevents.domain.usecase.GetSportsUseCase
 import com.mypackage.sportsevents.domain.usecase.UpdateFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SportsViewModel @Inject constructor(
     private val getSportsUseCase: GetSportsUseCase,
-    private val updateFavoriteUseCase: UpdateFavoriteUseCase
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase,
+    private val filterFavoriteEventsUseCase: FilterFavoriteEventsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SportsUiState>(SportsUiState.Loading)
@@ -54,5 +57,8 @@ class SportsViewModel @Inject constructor(
             }
         }
     }
+
+    fun filterByFavorites(events: List<Event>) = filterFavoriteEventsUseCase.invoke(events)
+
 }
 
