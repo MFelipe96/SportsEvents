@@ -7,10 +7,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Sports
+import androidx.compose.material.icons.filled.SportsBar
+import androidx.compose.material.icons.filled.SportsBasketball
+import androidx.compose.material.icons.filled.SportsEsports
+import androidx.compose.material.icons.filled.SportsHandball
+import androidx.compose.material.icons.filled.SportsHockey
+import androidx.compose.material.icons.filled.SportsScore
+import androidx.compose.material.icons.filled.SportsSoccer
+import androidx.compose.material.icons.filled.SportsTennis
+import androidx.compose.material.icons.filled.SportsVolleyball
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mypackage.sportsevents.domain.model.Sport
@@ -47,6 +58,11 @@ fun SportSection(
             Text(
                 text = sport.name,
                 style = MaterialTheme.typography.titleMedium
+            )
+            Icon(
+                imageVector = getSportIcon(sport.id),
+                contentDescription = null,
+                modifier = Modifier.size(28.dp).padding(4.dp),
             )
             Spacer(modifier = Modifier.weight(1f))
             ShowFavoritesButton(isFavoriteFilterEnabled, onFavoriteToggleChange)
@@ -88,6 +104,22 @@ fun ShowFavoritesButton(isFavoriteFilterEnabled: Boolean, onFavoriteToggleChange
         )
     }
 }
+
+fun getSportIcon(sportId: String): ImageVector {
+    return when (sportId.lowercase()) {
+        "foot", "futs" -> Icons.Default.SportsSoccer
+        "bask" -> Icons.Default.SportsBasketball
+        "tabl", "tenn" -> Icons.Default.SportsTennis
+        "voll" -> Icons.Default.SportsVolleyball
+        "esps" -> Icons.Default.SportsEsports
+        "iceh" -> Icons.Default.SportsHockey
+        "hand" -> Icons.Default.SportsHandball
+        "snoo" -> Icons.Default.SportsBar
+        "dart" -> Icons.Default.SportsScore
+        else -> Icons.Default.Sports
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun SportSectionPreview() {
