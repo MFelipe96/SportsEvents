@@ -16,8 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mypackage.sportsevents.R
 import com.mypackage.sportsevents.domain.model.Sport
 import com.mypackage.sportsevents.presentation.ui.components.SportSection
 import com.mypackage.sportsevents.presentation.viewmodel.SportsUiState
@@ -46,7 +48,7 @@ fun SportsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("No sports events available")
+                    Text(stringResource(R.string.no_events_available_error_msg))
                 }
             } else {
                 SportsContent(sports = sports) { eventId ->
@@ -58,10 +60,12 @@ fun SportsScreen(
         is SportsUiState.Error -> {
             val message = (uiState as SportsUiState.Error).message
             Box(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Error: $message")
+                Text(stringResource(R.string.generic_error_msg, message))
             }
         }
     }
