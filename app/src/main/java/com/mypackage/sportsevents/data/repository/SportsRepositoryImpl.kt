@@ -48,4 +48,7 @@ class SportsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateFavoriteStatus(eventId: String, isFavorite: Boolean) {
+        sportsDao.updateFavorite(eventId, isFavorite)
+    }
 }

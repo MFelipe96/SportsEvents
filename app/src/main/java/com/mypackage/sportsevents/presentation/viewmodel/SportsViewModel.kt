@@ -3,6 +3,7 @@ package com.mypackage.sportsevents.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mypackage.sportsevents.domain.usecase.GetSportsUseCase
+import com.mypackage.sportsevents.domain.usecase.UpdateFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SportsViewModel @Inject constructor(
-    private val getSportsUseCase: GetSportsUseCase
+    private val getSportsUseCase: GetSportsUseCase,
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SportsUiState>(SportsUiState.Loading)
@@ -40,6 +42,7 @@ class SportsViewModel @Inject constructor(
                 val updatedSports = currentState.sports.map { sport ->
                     val updatedEvents = sport.events.map { event ->
                         if (event.id == eventId) {
+                            updateFavoriteUseCase(event.id, !event.isFavorite)
                             event.copy(isFavorite = !event.isFavorite)
                         } else {
                             event
