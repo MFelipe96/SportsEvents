@@ -12,7 +12,6 @@ class SportsRepositoryImpl @Inject constructor(
     private val api: SportsApi
 ) : SportsRepository {
     override suspend fun getAllSports(): List<Sport> {
-        return api.getSports().map { it.toDomain() }
         try {
             val response = api.getSports()
             return response.map { it.toDomain() }
