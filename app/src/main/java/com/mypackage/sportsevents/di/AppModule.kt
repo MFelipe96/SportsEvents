@@ -6,6 +6,7 @@ import com.mypackage.sportsevents.data.local.dao.SportsDao
 import com.mypackage.sportsevents.data.remote.api.SportsApi
 import com.mypackage.sportsevents.data.repository.SportsRepositoryImpl
 import com.mypackage.sportsevents.domain.repository.SportsRepository
+import com.mypackage.sportsevents.utils.NetworkHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +36,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSportsRepository(api: SportsApi, sportsDao: SportsDao): SportsRepository {
-        return SportsRepositoryImpl(api, sportsDao)
+    fun provideSportsRepository(api: SportsApi, sportsDao: SportsDao, networkHelper: NetworkHelper): SportsRepository {
+        return SportsRepositoryImpl(api, sportsDao, networkHelper)
     }
 }

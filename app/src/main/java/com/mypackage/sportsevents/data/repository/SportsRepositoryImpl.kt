@@ -7,11 +7,13 @@ import com.mypackage.sportsevents.data.remote.api.SportsApi
 import com.mypackage.sportsevents.data.remote.mapper.toDomain
 import com.mypackage.sportsevents.domain.model.Sport
 import com.mypackage.sportsevents.domain.repository.SportsRepository
+import com.mypackage.sportsevents.utils.NetworkHelper
 import javax.inject.Inject
 
 class SportsRepositoryImpl @Inject constructor(
     private val api: SportsApi,
-    private val sportsDao: SportsDao
+    private val sportsDao: SportsDao,
+    private val networkHelper: NetworkHelper
 ) : SportsRepository {
     override suspend fun getAllSports(): List<Sport> {
         return try {
@@ -55,9 +57,10 @@ class SportsRepositoryImpl @Inject constructor(
                         events = events.map { it.toDomain() }
                     )
                 }
-            } else {
+            } else if (!networkHelper.isNetworkAvailable()){
+                error("No data connection.")
+            }else
                 throw e
-            }
         }
     }
 
