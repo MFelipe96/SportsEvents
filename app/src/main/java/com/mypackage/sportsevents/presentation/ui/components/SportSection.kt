@@ -65,17 +65,19 @@ fun SportSection(
 }
 
 @Composable
-fun ShowFavoritesButton(isFavoriteFilterEnabled: Boolean, onFavoriteToggleChange: (Boolean) -> Unit){
+fun ShowFavoritesButton(isFavoriteFilterEnabled: Boolean, onFavoriteToggleChange: (Boolean) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = Icons.Default.Star,
-            contentDescription = null,
-            tint = if (isFavoriteFilterEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(Modifier.width(4.dp))
         Switch(
             checked = isFavoriteFilterEnabled,
-            onCheckedChange = onFavoriteToggleChange
+            onCheckedChange = onFavoriteToggleChange,
+            thumbContent = {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = null,
+                        modifier = Modifier.size(SwitchDefaults.IconSize),
+                        tint = if (isFavoriteFilterEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+                    )
+            }
         )
     }
 
