@@ -53,13 +53,19 @@ fun SportSection(
         }
         Divider()
         AnimatedVisibility(visible = isExpanded) {
-            Column {
-                events.forEach { event ->
-                    EventItem(
-                        event = event,
-                        onFavoriteClick = { onFavoriteClick(event.id) }
+            Column(modifier = Modifier.fillMaxWidth()){
+                if(events.isNotEmpty()) {
+                    events.forEach { event ->
+                        EventItem(
+                            event = event,
+                            onFavoriteClick = { onFavoriteClick(event.id) }
+                        )
+                    }
+                }else
+                    Text(
+                        text = "No favorite events",
+                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
                     )
-                }
             }
         }
     }
