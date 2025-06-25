@@ -82,7 +82,7 @@ fun EventCountdown(eventTimestamp: Long) {
     Text(
         text = displayText,
         style = MaterialTheme.typography.bodyMedium,
-        color = if (diff > 0) Color.Blue else Color.Red
+        color = if (diff > 0) MaterialTheme.colorScheme.secondary else Color.Red
     )
 }
 
