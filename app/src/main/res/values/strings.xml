@@ -4,4 +4,6 @@
     <string name="generic_error_msg">Error: %1$s</string>
     <string name="no_favorite_events_msg">No favorite events</string>
     <string name="expand_or_collapse_description">Expand or Collapse</string>
+    <string name="ok_msg">OK</string>
+    <string name="match_details_title">Match Details</string>
 </resources>

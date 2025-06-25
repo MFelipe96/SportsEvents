@@ -1,5 +1,6 @@
 package com.mypackage.sportsevents.presentation.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -9,8 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mypackage.sportsevents.R
 import com.mypackage.sportsevents.domain.model.Event
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -39,7 +43,7 @@ fun EventItem(
             Column(modifier = Modifier.weight(1f)) {
                 val competitors = event.name.split("-").map { it.trim() }
                 if (competitors.size == 2) {
-                    Text("${competitors[0]} vs ${competitors[1]}", style = MaterialTheme.typography.bodyLarge)
+                    buildCompetitorsLayout(firstCompetitor = competitors[0], secondCompetitor = competitors[1])
                 } else {
                     Text(event.name, style = MaterialTheme.typography.bodyLarge)
                 }
@@ -57,7 +61,49 @@ fun EventItem(
         }
     }
 }
+@Composable
+fun buildCompetitorsLayout(firstCompetitor: String, secondCompetitor: String){
+    var showDialog by remember { mutableStateOf(false) }
 
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { showDialog = true }
+    ) {
+        Text(
+            text = firstCompetitor,
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "vs",
+            style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.primary)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = secondCompetitor,
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(stringResource(R.string.match_details_title)) },
+            text = { Text("$firstCompetitor vs $secondCompetitor") },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(stringResource(R.string.ok_msg))
+                }
+            }
+        )
+    }
+
+}
 @Composable
 fun EventCountdown(eventTimestamp: Long) {
     var now by remember { mutableLongStateOf(System.currentTimeMillis() / 1000) }
