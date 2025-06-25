@@ -7,6 +7,7 @@ fun EventDto.toDomain(): Event {
     return Event(
         id = id,
         name = name,
-        timestamp = timestamp
+        timestamp = timestamp,
+        isFavorite = false
     )
 }

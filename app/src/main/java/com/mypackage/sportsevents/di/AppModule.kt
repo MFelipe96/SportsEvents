@@ -2,6 +2,7 @@ package com.mypackage.sportsevents.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.mypackage.sportsevents.data.local.dao.SportsDao
 import com.mypackage.sportsevents.data.remote.api.SportsApi
 import com.mypackage.sportsevents.data.repository.SportsRepositoryImpl
 import com.mypackage.sportsevents.domain.repository.SportsRepository
@@ -34,7 +35,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSportsRepository(api: SportsApi): SportsRepository {
-        return SportsRepositoryImpl(api)
+    fun provideSportsRepository(api: SportsApi, sportsDao: SportsDao): SportsRepository {
+        return SportsRepositoryImpl(api, sportsDao)
     }
 }

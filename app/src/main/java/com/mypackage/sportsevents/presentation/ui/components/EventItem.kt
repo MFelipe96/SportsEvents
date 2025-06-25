@@ -76,7 +76,7 @@ fun EventCountdown(eventTimestamp: Long) {
     val displayText = if (diff > 0) {
         "Starts in ${formatTime(diff)}"
     } else {
-        "Started ${formatDateTime(eventTimestamp)}"
+        "Started at ${formatDateTime(eventTimestamp)}"
     }
 
     Text(
