@@ -6,4 +6,5 @@
     <string name="expand_or_collapse_description">Expand or Collapse</string>
     <string name="ok_msg">OK</string>
     <string name="match_details_title">Match Details</string>
+    <string name="try_again_button">Try again</string>
 </resources>

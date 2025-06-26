@@ -26,7 +26,7 @@ class SportsViewModel @Inject constructor(
         loadSports()
     }
 
-    private fun loadSports() {
+    fun loadSports() {
         viewModelScope.launch {
             _uiState.value = SportsUiState.Loading
             try {
